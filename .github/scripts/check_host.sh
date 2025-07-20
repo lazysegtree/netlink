@@ -10,3 +10,5 @@ hostnamectl
 ip address show
 lscpu
 df -h
+
+log "Ending checker"
