@@ -225,6 +225,10 @@ func (h *Handle) RuleListFiltered(family int, filter *Rule, filterMask uint64) (
 		return nil, executeErr
 	}
 
+	if filter != nil {
+		fmt.Printf("filter : %v\n", *filter)
+	}
+
 	var res = make([]Rule, 0)
 	for i := range msgs {
 		msg := nl.DeserializeRtMsg(msgs[i])
@@ -294,6 +298,8 @@ func (h *Handle) RuleListFiltered(family int, filter *Rule, filterMask uint64) (
 			}
 		}
 
+		fmt.Printf("rule : %v\n", *rule)
+
 		if filter != nil {
 			switch {
 			case filterMask&RT_FILTER_SRC != 0 &&
@@ -315,6 +321,7 @@ func (h *Handle) RuleListFiltered(family int, filter *Rule, filterMask uint64) (
 				continue
 			}
 		}
+		fmt.Println("Passed the Filter")
 
 		res = append(res, *rule)
 	}
