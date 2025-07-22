@@ -583,10 +583,15 @@ func runRuleListFiltered(t *testing.T, family int, srcNet, dstNet *net.IPNet) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			//rules_before, _ := RuleListFiltered(family, tt.ruleFilter, tt.filterMask)
+			//t.Logf("Got rules, before: %v", rules_before)
 			rule := tt.preRun()
 			wantRules, wantErr := tt.setupWant(rule)
 
+			t.Logf("Wanted rules : %v", wantRules)
+
 			rules, err := RuleListFiltered(family, tt.ruleFilter, tt.filterMask)
+			t.Logf("Got rules: %v", rules)
 			for i := 0; i < len(wantRules); i++ {
 				if len(wantRules) == len(rules) {
 					break
@@ -595,6 +600,8 @@ func runRuleListFiltered(t *testing.T, family int, srcNet, dstNet *net.IPNet) {
 				rules, err = RuleListFiltered(family, tt.ruleFilter, tt.filterMask)
 			}
 			tt.postRun(rule)
+
+			t.Logf("Got rules, after: %v", rules)
 
 			if len(wantRules) != len(rules) {
 				t.Errorf("Expected len: %d, got: %d", len(wantRules), len(rules))
